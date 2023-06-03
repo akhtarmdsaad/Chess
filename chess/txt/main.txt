@@ -1,0 +1,95 @@
+import pygame,sys
+from pygame.locals import *
+from settings import *
+from players import *
+from chessPieces import *
+
+
+pygame.init()
+
+screen=pygame.display.set_mode((500,500))
+highlight_boxes=[]
+boxes=[]
+box_selected=None
+box_selected_2=None
+
+for j in range(8):
+    for i in range (8):
+        boxes.append(Box((width*i,width*j),0, BLACK if (i+j)%2==0 else WHITE,i+1+j*8))
+
+for i in range(len(board)):
+    boxes[i].value=board[i]
+
+def moves_allowed(box):
+    piece=box.value
+    if "H" in piece:
+        return rook(box.no,boxes)
+    elif "U" in piece:
+        return bishop(box.no, boxes)
+    elif "M" in piece:
+        return queen(box.no, boxes)
+    elif "G" in piece:
+        return knight(box.no,boxes)
+    elif "R" in piece:
+        return king(box.no, boxes)
+    elif len(piece) == 1:
+        #its pawn
+        return pawn(box.no, boxes)
+    return []
+
+
+
+def highlight (boxes_no):
+    global boxes
+    for no in boxes_no:
+        for box in boxes:
+            if box.no==no:
+                box.highlight=True
+    global highlight_boxes
+    highlight_boxes = boxes_no
+    return boxes_no
+number=1
+
+while True:
+    screen.fill((bgcolor))
+
+    #draw boxes
+    pygame.draw.rect(screen,BLACK,(padx,pady,8*width,8*width),5)
+    for box in boxes:
+        box.show(screen)
+
+    for event in pygame.event.get():
+        if event.type==QUIT:
+            pygame.quit()
+            sys.exit(0)
+        if event.type==MOUSEBUTTONDOWN:
+            x,y=event.pos
+            if box_selected:
+                #get clicked box
+                for box in boxes:
+                    if box.clicked(x,y):
+                        box_selected_2=box
+
+                #check if box in highlight_boxes
+                if box_selected_2.highlight:
+                    box_selected_2.value=box_selected.value
+                    box_selected.value=""
+                
+                
+                box_selected=None
+                box_selected_2=None
+                for b in boxes:
+                    b.click=False
+                    b.highlight=False
+            else:
+                #to click boxes
+                for box in boxes:
+                    if box.clicked(x,y):
+                        box_selected=box
+                        box_selected.click=not box_selected.click
+                        break
+                try:number=box_selected.no
+                except:pass
+                highlight(moves_allowed(box_selected))
+
+    pygame.display.update()

@@ -1,0 +1,16 @@
+made possible moves (all)
+made highlight moves
+
+made make move
+  -made moved to empty place
+  -made killed the opponent piece 
+made Fix raja(king) and knight move
+
+made turn making
+
+made Check
+checkmate
+
+made castle
+enpassant
+super pawn(generates queen if gone to last)

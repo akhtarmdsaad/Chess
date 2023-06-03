@@ -1,0 +1,11 @@
+WHITE=(255,255,255)
+BLACK=(0,0,0)
+
+
+width=50
+padx=50
+pady=50
+
+bgcolor=WHITE
+clickcolor=(255,0,0)
+highlightcolor=(0,255,255)

@@ -1,0 +1,41 @@
+import pygame
+from settings import *
+
+class Box:
+
+	def __init__(self,pos,value,color,no):
+		self.pos=(pos[0]+padx,pos[1]+pady)
+		self.no=no
+		self.value=value
+		self.width=width
+		self.rootcolor=color
+		self.color=color
+		self.fontcolor=BLACK if self.color is WHITE else WHITE
+		self.font=pygame.font.Font(pygame.font.get_default_font(),width//2)
+		self.rect=pygame.Rect(*self.pos,self.width,self.width)
+		self.click=False
+		self.highlight=False
+
+		assert self.color == BLACK or self.color==WHITE,"Only black and white colors are allowed"
+
+	def show(self,screen):
+		pygame.draw.rect(screen,self.color,self.rect)
+		surfObj=self.font.render(str(self.value),1,self.fontcolor)
+		screen.blit(surfObj,self.pos)
+		if self.click:self.color=clickcolor
+		elif self.highlight:self.color=highlightcolor
+		else:self.color=self.rootcolor
+
+	def clicked(self,x,y):
+			return self.rect.collidepoint(x,y)
+
+board=[
+	'HW','GW','UW','MW','RW','UW','GW','HW',
+	'W','W','W','W','W','W','W','W',
+	'','','','','','','','',
+	'','','','','','','','',
+	'','','','','','','','',
+	'','','','','','','','',
+	'B','B','B','B','B','B','B','B',
+	'HB','GB','UB','MB','RB','UB','GB','HB'
+]
